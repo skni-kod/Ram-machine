@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "ram_machine.h"
 
 FILE *load_file(char *file_path)
@@ -42,81 +43,76 @@ size_t count_commands(FILE *fp)
     return amount;
 }
 
-struct Command *parse_commands(FILE *fp)
+struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
 {
+    //TODO dynamically allocated line reading
+    //TODO dynamically allocated structures
     struct Command *command_list;
-    size_t cmd_amount = count_commands(fp);
     size_t line_counter = 0;
     char buffer[256];
     char *token;
 
-    command_list = malloc(cmd_amount * sizeof(Command));
+    *cmd_amount = count_commands(fp);
+    command_list = malloc(*cmd_amount * sizeof(Command));
 
-    while (line_counter < cmd_amount)
-    {
-        //printf("line_counter:%d", line_counter);
-        //first word loaded flag
-        int struct_counter = 0;
-        int flag = 0;
+    while (line_counter < *cmd_amount)
+    {   int flag = 0;
+        int cmd_counter = 0;
+
+        command_list[line_counter].cmd_index = line_counter;
         fgets(buffer, 256, fp);
-        
-        if (flag == 0)
+        token = strtok(buffer, ",\n");
+
+        while (flag != 1)
         {
-            token = strtok(buffer, ",");
-        }
-        
-        while (token != NULL){
-                        
-            if (flag != 0)
+            //switch filling the cmd struct up
+            switch (cmd_counter)
             {
-                token = strtok(NULL, ",\n");
-                if (token == NULL)
-                    continue;
+                case (0):
+                    strcpy(command_list[line_counter].label, token);
+                    break;
+                case (1):
+                    strcpy(command_list[line_counter].instruction, token);
+                    break;
+                case (2):
+                    command_list[line_counter].operator = token[0];
+                    break;
+                case (3): ;
+                    size_t tmp = -1;
+
+                    sscanf(token, "%d", &tmp);
+                    command_list[line_counter].dest_adress = tmp;
+                    break;
             }
 
-            printf("%s ", token);
-
-            //wyszukiwanie końca linii
-            //nie wiem czy potrzebne
+            //searching for EOL
             for (int i = 0; i < strlen(token); i++)
             {
                 if (token[i] == ';')
-                    printf("KONIEC\n");
+                {
+                    flag = 1;
+                    break;
+                }
             }
 
-            switch (struct_counter)
-            {
-                //index
-                case (0):
-                    command_list[line_counter].cmd_index = line_counter + 1;
-                    break;
-                //label
-                case (1):
-                    strcpy(command_list[line_counter].label, token);
-                    break;
-                //instruction
-                case (2):
-                    strcpy(command_list[line_counter].instruction, token);
-                    break;
-                //operator
-                case (3):
-                    command_list[line_counter].operator = token;
-                    break;
-                //destination adress
-                case (4):
-                    command_list[line_counter].dest_adress = token;
-                    break;
-            }
-            
-
-            flag = 1;
-            struct_counter++;
+            token = strtok(NULL, ",\n"); 
+            cmd_counter++;
         }
+
         line_counter++;
     }
     
-
     return command_list;
 }
 
-
+void print_commands(Command *cmd_list, size_t cmd_count)
+{
+    for (int i = 0; i < cmd_count; i++){
+        printf("index:%d\n", cmd_list[i].cmd_index);
+        printf("label:%s\n", cmd_list[i].label);
+        printf("instruction:%s\n", cmd_list[i].instruction);
+        printf("operator:%c\n", cmd_list[i].operator);
+        printf("dest_adress:%i\n", cmd_list[i].dest_adress);
+        printf("\n");
+    }
+}

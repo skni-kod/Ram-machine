@@ -5,17 +5,21 @@
 int main()
 {
     FILE *fp;
-    Command *command_list;
+    Command *cmd_list;
+    size_t cmd_amount;
+
     fp = load_file("/home/musiek/Pulpit/Ram-machine/instructions.txt");
-    print_file(fp);
-    printf("%d\n", count_commands(fp));
+    //print_file(fp);
 
-    command_list = parse_commands(fp);
-
-    getchar();
+    cmd_list = parse_commands(fp, &cmd_amount);
     
-    free(command_list);
+    
+    print_commands(cmd_list, cmd_amount);
+    
 
+    getchar(); 
+
+    free(cmd_list);
     fclose(fp);
     return 0;
 }

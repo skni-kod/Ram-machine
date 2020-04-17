@@ -15,7 +15,8 @@ typedef struct Command
 
 FILE *load_file(char *file_path);
 void print_file(FILE *fp);
-struct Command *parse_commands(FILE *fp);
+struct Command *parse_commands(FILE *fp, size_t *cmd_count);
 size_t count_commands(FILE* fp);
+void print_commands(Command *cmd_list, size_t cmd_count);
 
 #endif 
