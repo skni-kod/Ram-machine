@@ -13,9 +13,9 @@ int main()
 
     cmd_list = parse_commands(fp, &cmd_amount);
     
-    
     print_commands(cmd_list, cmd_amount);
-    
+    int matching_label_index = get_matching_label(cmd_list, cmd_amount, cmd_list[3]);
+    printf("%d", matching_label_index);
 
     getchar(); 
 

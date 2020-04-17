@@ -10,7 +10,7 @@ FILE *load_file(char *file_path)
 
     if (fp == NULL)
     {
-        fprintf(stderr, "Error loading a file!");
+        fprintf(stderr, "Error loading a file!\n");
         exit(EXIT_FAILURE);
     }
 
@@ -102,12 +102,14 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
         line_counter++;
     }
     
+    rewind(fp);
     return command_list;
 }
 
 void print_commands(Command *cmd_list, size_t cmd_count)
 {
-    for (int i = 0; i < cmd_count; i++){
+    for (int i = 0; i < cmd_count; i++)
+    {
         printf("index:%d\n", cmd_list[i].cmd_index);
         printf("label:%s\n", cmd_list[i].label);
         printf("instruction:%s\n", cmd_list[i].instruction);
@@ -115,4 +117,16 @@ void print_commands(Command *cmd_list, size_t cmd_count)
         printf("dest_adress:%i\n", cmd_list[i].dest_adress);
         printf("\n");
     }
+}
+
+size_t get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd)
+{
+    for (int i = 0; i < cmd_count; i++)
+    {
+        if (i != cmd.cmd_index && strcmp(cmd.label, cmd_list[i].label) == 0)
+            return i;
+    }
+    //matching label not found means that the program itself has to be wrong
+    fprintf(stderr, "Error while searching for a matching \"%s\" label:matching label not found!\n", cmd.label);
+    exit(EXIT_FAILURE);
 }
