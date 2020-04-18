@@ -1,8 +1,8 @@
+#include "ram_machine.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "ram_machine.h"
 
 FILE *load_file(char *file_path)
 {
@@ -55,6 +55,12 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
     *cmd_amount = count_commands(fp);
     command_list = malloc(*cmd_amount * sizeof(Command));
 
+    if (command_list == NULL)
+    {
+        fprintf(stderr, "Error while allocating memory:parse_commands()!\n");
+        exit(EXIT_FAILURE);
+    }
+
     while (line_counter < *cmd_amount)
     {   int flag = 0;
         int cmd_counter = 0;
@@ -75,7 +81,7 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
                     strcpy(command_list[line_counter].instruction, token);
                     break;
                 case (2):
-                    command_list[line_counter].operator = token[0];
+                    command_list[line_counter].operand = token[0];
                     break;
                 case (3): ;
                     size_t tmp = -1;
@@ -113,7 +119,7 @@ void print_commands(Command *cmd_list, size_t cmd_count)
         printf("index:%d\n", cmd_list[i].cmd_index);
         printf("label:%s\n", cmd_list[i].label);
         printf("instruction:%s\n", cmd_list[i].instruction);
-        printf("operator:%c\n", cmd_list[i].operator);
+        printf("operator:%c\n", cmd_list[i].operand);
         printf("dest_adress:%i\n", cmd_list[i].dest_adress);
         printf("\n");
     }
