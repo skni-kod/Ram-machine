@@ -2,27 +2,31 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define mem_size 100
+
 int main()
 {
-    FILE *fp;
+    FILE *instr_fp, *input_fp;
     Command *cmd_list;
     size_t cmd_amount;
     int *memory;
-    size_t mem_size = 100;
+    int instr_ptr = 0;
 
-    fp = load_file("/home/musiek/Pulpit/Ram-machine/instructions.txt");
-    cmd_list = parse_commands(fp, &cmd_amount);
-    fclose(fp);
+    //init
+    instr_fp = load_file("/home/musiek/Pulpit/Ram-machine/instructions.txt");
+    cmd_list = parse_commands(instr_fp, &cmd_amount);
+    print_commands(cmd_list, cmd_amount);
+    fclose(instr_fp);
 
     memory = init_memory(mem_size);
-    save_to_memory(&memory, 0, 5);
-    save_to_memory(&memory, 1, 15);
 
-    print_memory(&memory, mem_size);
-    printf("loaded:%d\n", load_from_memory(&memory, 1));
+    input_fp = load_file("/home/musiek/Pulpit/Ram-machine/input.txt");
+    
     getchar(); 
 
-    free(cmd_list);
+    loop(cmd_list, cmd_amount, &instr_ptr, input_fp, &memory);
+
     free(memory);
+    free(cmd_list);
     return 0;
 }

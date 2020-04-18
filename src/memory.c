@@ -44,6 +44,6 @@ void print_memory(int **memory, size_t mem_size)
     printf("index : value\n");
     for (int i = 0; i < mem_size; i++)
     {   
-        printf("%d - %d\n", i, (*memory)[i]);
+        printf("%d   -   %d\n", i, (*memory)[i]);
     }
 }

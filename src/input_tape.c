@@ -31,6 +31,18 @@ void print_file(FILE *fp)
     rewind(fp);
 }
 
+int get_new_input(FILE *fp)
+{
+    //add
+    int input;
+    if (fscanf(fp, "%d", &input) <= 0)
+    {
+        fprintf(stderr, "Found EOF while getting new input!\n");
+        exit(EXIT_FAILURE);
+    }
+    return input;
+}
+
 size_t count_commands(FILE *fp)
 {
     size_t amount = 0;
