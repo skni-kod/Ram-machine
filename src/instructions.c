@@ -45,48 +45,138 @@ int execute_command(Command *cmd_list, size_t cmd_count, int *instruction_pointe
 
         return 0;
     }
-    //get HALT on the end
-    else if (strcmp(cmd_list[*instruction_pointer].instruction, "HALT") == 0)
-    {
-        printf("KONIEC PROGRAMU");
-        exit(EXIT_SUCCESS);
-    }
     //end of jump instructions, incrementing ip at the very end of the function
     else if (strcmp(cmd_list[*instruction_pointer].instruction, "LOAD") == 0)
     {
-        memory[0] = memory[cmd_list[*instruction_pointer].dest_adress];
+        if (cmd_list[*instruction_pointer].operand == '*')
+        {
+            int tmp = memory[cmd_list[*instruction_pointer].dest_adress];
+            memory[0] = memory[tmp];
+        }
+        else if (cmd_list[*instruction_pointer].operand == '=')
+            memory[0] = cmd_list[*instruction_pointer].dest_adress;
+        else
+            memory[0] = memory[cmd_list[*instruction_pointer].dest_adress];
     }
     else if (strcmp(cmd_list[*instruction_pointer].instruction, "STORE") == 0)
     {
-        memory[cmd_list[*instruction_pointer].dest_adress] = memory[0];
+        if (cmd_list[*instruction_pointer].operand == '*')
+        {
+            int tmp = memory[cmd_list[*instruction_pointer].dest_adress];
+            memory[tmp] = memory[0];
+        }
+        else if (cmd_list[*instruction_pointer].operand == '=')
+        {
+            fprintf(stderr, "'=' OPERAND WITH STORE INSTRUCTION ERROR");
+            exit(EXIT_FAILURE);
+        }
+        else
+            memory[cmd_list[*instruction_pointer].dest_adress] = memory[0];
     }
-    //add operands
     else if (strcmp(cmd_list[*instruction_pointer].instruction, "ADD") == 0)
     {
-        memory[0] += memory[cmd_list[*instruction_pointer].dest_adress];
+        if (cmd_list[*instruction_pointer].operand == '*')
+        {
+            int tmp = memory[cmd_list[*instruction_pointer].dest_adress];
+            memory[0] += memory[tmp];
+        }
+        else if (cmd_list[*instruction_pointer].operand == '=')
+        {
+            memory[0] += cmd_list[*instruction_pointer].dest_adress;
+        }
+        else
+            memory[0] += memory[cmd_list[*instruction_pointer].dest_adress];
     }
     else if (strcmp(cmd_list[*instruction_pointer].instruction, "SUB") == 0)
     {
-        memory[0] -= memory[cmd_list[*instruction_pointer].dest_adress];
+        if (cmd_list[*instruction_pointer].operand == '*')
+        {
+            int tmp = memory[cmd_list[*instruction_pointer].dest_adress];
+            memory[0] -= memory[tmp];
+        }
+        else if (cmd_list[*instruction_pointer].operand == '=')
+        {
+            memory[0] -= cmd_list[*instruction_pointer].dest_adress;
+        }
+        else
+            memory[0] -= memory[cmd_list[*instruction_pointer].dest_adress];
     }
     else if (strcmp(cmd_list[*instruction_pointer].instruction, "MULT") == 0)
     {
-        memory[0] *= memory[cmd_list[*instruction_pointer].dest_adress];
+        if (cmd_list[*instruction_pointer].operand == '*')
+        {
+            int tmp = memory[cmd_list[*instruction_pointer].dest_adress];
+            memory[0] *= memory[tmp];
+        }
+        else if (cmd_list[*instruction_pointer].operand == '=')
+        {
+            memory[0] *= cmd_list[*instruction_pointer].dest_adress;
+        }
+        else
+            memory[0] *= memory[cmd_list[*instruction_pointer].dest_adress];
     }
     else if (strcmp(cmd_list[*instruction_pointer].instruction, "DIV") == 0)
     {
-        memory[0] /= memory[cmd_list[*instruction_pointer].dest_adress];
+        if (cmd_list[*instruction_pointer].operand == '*')
+        {
+            int tmp = memory[cmd_list[*instruction_pointer].dest_adress];
+            memory[0] /= memory[tmp];
+        }
+        else if (cmd_list[*instruction_pointer].operand == '=')
+        {
+            memory[0] /= cmd_list[*instruction_pointer].dest_adress;
+        }
+        else
+            memory[0] /= memory[cmd_list[*instruction_pointer].dest_adress];
     }
     else if (strcmp(cmd_list[*instruction_pointer].instruction, "READ") == 0)
     {
-        int tmp;
-        fscanf(input_fp, "%d", &tmp);
-        memory[cmd_list[*instruction_pointer].dest_adress] = tmp;
+        if (cmd_list[*instruction_pointer].operand == '*')
+        {
+            int tmp, addr_tmp;
+            fscanf(input_fp, "%d", &tmp);
+            addr_tmp = memory[cmd_list[*instruction_pointer].dest_adress];
+            memory[addr_tmp] = tmp;
+        }
+        else if (cmd_list[*instruction_pointer].operand == '*')
+        {
+            fprintf(stderr, "'=' OPERAND WITH READ INSTRUCTION ERROR");
+            exit(EXIT_FAILURE);
+        }
+        else
+        {
+            int tmp;
+            fscanf(input_fp, "%d", &tmp);
+            memory[cmd_list[*instruction_pointer].dest_adress] = tmp;
+        }
     }
     else if (strcmp(cmd_list[*instruction_pointer].instruction, "WRITE") == 0)
     {
-        printf("OUTPUT:%d\n", memory[cmd_list[*instruction_pointer].dest_adress]);
+        //TODO output_tape
+        if (cmd_list[*instruction_pointer].operand == '*')
+        {
+            int tmp;
+            tmp = memory[cmd_list[*instruction_pointer].dest_adress];
+            printf("OUTPUT:%d\n", memory[tmp]);
+        }
+        else if (cmd_list[*instruction_pointer].operand == '=')
+        {
+            printf("OUTPUT:%d\n", cmd_list[*instruction_pointer].dest_adress);
+        }
+        else
+            printf("OUTPUT:%d\n", memory[cmd_list[*instruction_pointer].dest_adress]);
     }
+    else if (strcmp(cmd_list[*instruction_pointer].instruction, "HALT") == 0)
+    {
+        printf("PROGRAM FINISHED");
+        exit(EXIT_SUCCESS);
+    }
+    else
+    {
+        fprintf(stderr, "WRONG INSTRUCTION ERROR");
+        exit(EXIT_FAILURE);
+    }
+    
     
 
     *instruction_pointer += 1;

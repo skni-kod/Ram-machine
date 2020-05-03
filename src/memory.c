@@ -17,7 +17,7 @@ int *init_memory(size_t mem_size)
 
 void save_to_memory(int **memory, int index, int value)
 {
-    if (index > 99)
+    if (index > MEM_SIZE)
     {
         fprintf(stderr, "Memory limit exceeded!");
         exit(EXIT_FAILURE);
@@ -28,7 +28,7 @@ void save_to_memory(int **memory, int index, int value)
 
 int load_from_memory(int **memory, int index)
 {
-    if (index > 99)
+    if (index > MEM_SIZE)
     {
         fprintf(stderr, "Memory limit exceeded!");
         exit(EXIT_FAILURE);

@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MEM_SIZE 100
+
 typedef struct Command
 {
     size_t cmd_index;
