@@ -10,6 +10,7 @@ typedef struct Command
     char instruction[32];
     char operand;
     size_t dest_adress;
+    char dest_label[32];
 }Command;
 
 //input tape
@@ -28,7 +29,7 @@ int load_from_memory(int **memory, int index);
 void print_memory(int **memory, size_t mem_size);
 
 //instructions
-void execute_command(Command *cmd_list, size_t cmd_count, int *instruction_pointer, FILE *input_fp, int **memory);
-void loop(Command *cmd_list, size_t cmd_count, int *instruction_pointer, FILE *input_fp, int **memory);
+int execute_command(Command *cmd_list, size_t cmd_count, int *instruction_pointer, FILE *input_fp, int *memory);
+void loop(Command *cmd_list, size_t cmd_count, FILE *input_fp, int *memory);
 
 #endif 

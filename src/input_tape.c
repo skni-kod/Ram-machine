@@ -96,11 +96,23 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
                     command_list[line_counter].operand = token[0];
                     break;
                 case (3): ;
-                    size_t tmp = -1;
-
-                    sscanf(token, "%d", &tmp);
-                    command_list[line_counter].dest_adress = tmp;
-                    break;
+                    if (strcmp(command_list[line_counter].instruction, "JGZT") == 0 ||
+                        strcmp(command_list[line_counter].instruction, "JUMP") == 0 || 
+                        strcmp(command_list[line_counter].instruction, "JZERO") == 0)
+                    {
+                        char tmp[32];
+                        sscanf(token, "%s", &tmp);
+                        strcpy(command_list[line_counter].dest_label, tmp);
+                        tmp[0]='\0';
+                        break;
+                    }
+                    else
+                    {
+                        int tmp = -1;
+                        sscanf(token, "%d", &tmp);
+                        command_list[line_counter].dest_adress = tmp;
+                        break;
+                    }
             }
 
             //searching for EOL
@@ -132,7 +144,8 @@ void print_commands(Command *cmd_list, size_t cmd_count)
         printf("label:%s\n", cmd_list[i].label);
         printf("instruction:%s\n", cmd_list[i].instruction);
         printf("operator:%c\n", cmd_list[i].operand);
-        printf("dest_adress:%i\n", cmd_list[i].dest_adress);
+        printf("dest_adress:%d\n", cmd_list[i].dest_adress);
+        printf("dest_label:%s\n", cmd_list[i].dest_label);
         printf("\n");
     }
 }
@@ -141,7 +154,7 @@ size_t get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd)
 {
     for (int i = 0; i < cmd_count; i++)
     {
-        if (i != cmd.cmd_index && strcmp(cmd.label, cmd_list[i].label) == 0)
+        if (i != cmd.cmd_index && strcmp(cmd.dest_label, cmd_list[i].label) == 0)
             return i;
     }
     //matching label not found means that the program itself has to be wrong

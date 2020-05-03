@@ -10,7 +10,7 @@ int main()
     Command *cmd_list;
     size_t cmd_amount;
     int *memory;
-    int instr_ptr = 0;
+    
 
     //init
     instr_fp = load_file("/home/musiek/Pulpit/Ram-machine/instructions.txt");
@@ -22,9 +22,11 @@ int main()
 
     input_fp = load_file("/home/musiek/Pulpit/Ram-machine/input.txt");
     
-    getchar(); 
+    loop(cmd_list, cmd_amount, input_fp, memory);
 
-    loop(cmd_list, cmd_amount, &instr_ptr, input_fp, &memory);
+
+    //getchar(); 
+
 
     free(memory);
     free(cmd_list);
