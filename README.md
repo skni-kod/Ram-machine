@@ -11,7 +11,7 @@ Example program for `abs` is listed below:
      , READ ,  , 0    , Read value to accumulator;
      , JGTZ ,  , NOABS, If accumulator is greather than 0 jump to NOABS;
      , STORE,  , 1    , Store accumulator to register 1;
-     , LOAD , =, 0    , Load 0 to accumulator ;
+     , LOAD , =, 0    , Load 0 to accumulator;
      , SUB  ,  , 1    , Subtract value in register 1 from accumulator;
 NOABS, WRITE,  , 0    , Write accumulator;
      , HALT ,  ,      , Stop;
@@ -29,7 +29,7 @@ Memory is made of registers. Register `0` is accumulator. Other registers can be
 The access modifier is used to specify how to handle the instruction argument. The instruction argument should be treated as follows:
 * ` ` - (nothing) register
 * `=` - literal
-* `*` - pointer to register
+* `*` - register's value is pointer to other register
 
 # Supported instructions
 List of supported instructions:
