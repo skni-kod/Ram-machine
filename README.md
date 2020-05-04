@@ -3,6 +3,7 @@ Program is a simple implementation of [RAM machine](https://en.wikipedia.org/wik
 
 # Program
 Program should be written with lines of code described as below:
+
 `[JUMP label], instruction, access modifier, argument, [comment];`
 
 Example program for `abs` is listed below:
@@ -37,12 +38,12 @@ List of supported instructions:
 | `JUMP, , argument` | jump to label `argument` |
 | `JZERO, , argument` | jump to label `argument` if accumulator is zero |
 | `JGTZ, , argument` | jump to label `argument` if accumulator is greather than zero | |
-| `LOAD, (nothing | = | *), argument` | load value to accumulator from `argument` |
-| `STORE, (nothing | *), argument` | store value from accumulator from `argument` |
-| `ADD, (nothing | = | *), argument` | add `argument` to accumulator value |
-| `SUB, (nothing | = | *), argument` | subtract `argument` from accumulator |
-| `MULT,(nothing | = | *), argument` | multiply accumulator by `argument` |
-| `DIV, (nothing | = | *), argument` | divide accumulator by `argument` |
-| `READ, (nothing | *), argument` | read from input tape |
-| `WRITE, (nothing | = | *), argument` | write to output tape |
+| `LOAD, (<nothing> or = or *), argument` | load value to accumulator from `argument` |
+| `STORE, (<nothing> or *), argument` | store value from accumulator from `argument` |
+| `ADD, (<nothing> or = or *), argument` | add `argument` to accumulator value |
+| `SUB, (<nothing> or = or *), argument` | subtract `argument` from accumulator |
+| `MULT,(<nothing> or = or *), argument` | multiply accumulator by `argument` |
+| `DIV, (<nothing> or = or *), argument` | divide accumulator by `argument` |
+| `READ, (<nothing> or *), argument` | read from input tape |
+| `WRITE, (<nothing> or = or *), argument` | write to output tape |
 | `HALT` | ends program |
