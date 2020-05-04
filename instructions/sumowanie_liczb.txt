@@ -1,0 +1,8 @@
+CZYTAJ,READ, ,1,wczytaj kolejna wartosc z tasmy;
+ ,LOAD, ,1,;
+ ,JZERO, ,KONIEC,jesli wartosc=0 zakoncz sumowanie;
+ ,ADD, ,2,dodaj dotychczasowa sume do wartosci;
+ ,STORE, ,2,zapisz nowa sume;
+ ,JUMP, ,CZYTAJ,;
+KONIEC,WRITE, ,2,wypisz sume;
+ ,HALT, , ,;

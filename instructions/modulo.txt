@@ -1,0 +1,12 @@
+ ,READ, ,1, read a;
+ ,READ, ,0, read b;
+ ,JZERO, ,ERROR,;
+ ,STORE, ,2,;
+ ,LOAD, ,1,;
+ ,DIV, ,2,;
+ ,MULT, ,2,;
+ ,STORE, ,2,;
+ ,LOAD, ,1,;
+ ,SUB, ,2,;
+ ,WRITE, ,0,;
+ERROR,HALT, , ,;
