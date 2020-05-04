@@ -32,7 +32,7 @@ int execute_command(Command *cmd_list, size_t cmd_count, int *instruction_pointe
 
         return 0;
     }
-    else if (strcmp(cmd_list[*instruction_pointer].instruction, "JGZT") == 0)
+    else if (strcmp(cmd_list[*instruction_pointer].instruction, "JGTZ") == 0)
     {
         if (memory[0] > 0)
         {
@@ -131,6 +131,7 @@ int execute_command(Command *cmd_list, size_t cmd_count, int *instruction_pointe
     }
     else if (strcmp(cmd_list[*instruction_pointer].instruction, "READ") == 0)
     {
+        //TODO additional function to get input values, tho dunno if necessarry 
         if (cmd_list[*instruction_pointer].operand == '*')
         {
             int tmp, addr_tmp;
@@ -176,8 +177,6 @@ int execute_command(Command *cmd_list, size_t cmd_count, int *instruction_pointe
         fprintf(stderr, "WRONG INSTRUCTION ERROR");
         exit(EXIT_FAILURE);
     }
-    
-    
 
     *instruction_pointer += 1;
     return 0;
@@ -191,8 +190,6 @@ void loop(Command *cmd_list, size_t cmd_count, FILE *input_fp, int *memory)
     while (1)
     {
         printf("current instr pointer:%d\n", instruction_pointer);
-        //current_cmd = cmd_list[*instruction_pointer];
         execute_command(cmd_list, cmd_count, &instruction_pointer, input_fp, memory);
-        
     }
 }

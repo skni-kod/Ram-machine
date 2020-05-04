@@ -96,7 +96,7 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
                     command_list[line_counter].operand = token[0];
                     break;
                 case (3): ;
-                    if (strcmp(command_list[line_counter].instruction, "JGZT") == 0 ||
+                    if (strcmp(command_list[line_counter].instruction, "JGTZ") == 0 ||
                         strcmp(command_list[line_counter].instruction, "JUMP") == 0 || 
                         strcmp(command_list[line_counter].instruction, "JZERO") == 0)
                     {
