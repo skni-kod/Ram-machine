@@ -4,16 +4,28 @@
 #include <stdlib.h>
 
 #define MEM_SIZE 100
+#define MAX_LABEL_LENGTH 33
 
 typedef struct Command
 {
     size_t cmd_index;
-    char label[32];
-    char instruction[32];
+    char label[MAX_LABEL_LENGTH];
+    char instruction[MAX_LABEL_LENGTH];
     char operand;
     size_t dest_adress;
-    char dest_label[32];
+    char dest_label[MAX_LABEL_LENGTH];
 }Command;
+
+typedef struct MachineState
+{
+    int *memory;
+    size_t max_memory_size;
+    int instruction_pointer;
+    size_t cmd_count;
+    Command *cmd_list;
+    FILE *input_fp;
+    FILE *output_fp; //TODO
+}MachineState;
 
 //input tape
 FILE *load_file(char *file_path);
@@ -31,7 +43,7 @@ int load_from_memory(int **memory, int index);
 void print_memory(int **memory, size_t mem_size);
 
 //instructions
-int execute_command(Command *cmd_list, size_t cmd_count, int *instruction_pointer, FILE *input_fp, int *memory);
-void loop(Command *cmd_list, size_t cmd_count, FILE *input_fp, int *memory);
+int execute_command(MachineState *machine_ptr);
+void loop(MachineState *machine_ptr);
 
 #endif 

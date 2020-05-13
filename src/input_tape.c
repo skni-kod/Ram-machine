@@ -33,7 +33,6 @@ void print_file(FILE *fp)
 
 int get_new_input(FILE *fp)
 {
-    //add
     int input;
     if (fscanf(fp, "%d", &input) <= 0)
     {
@@ -74,7 +73,8 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
     }
 
     while (line_counter < *cmd_amount)
-    {   int flag = 0;
+    {   
+        int flag = 0;
         int cmd_counter = 0;
 
         command_list[line_counter].cmd_index = line_counter;
@@ -83,6 +83,12 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
 
         while (flag != 1)
         {
+            if (cmd_counter != 4 && strlen(token) > 32)
+            {
+                fprintf(stderr, "Error while parsing instructions: label or instruction too long.\n");
+                fprintf(stderr, "Current label/instruction maximum length is %d.\n", MAX_LABEL_LENGTH - 1);
+                exit(EXIT_FAILURE); 
+            }
             //switch filling the cmd struct up
             switch (cmd_counter)
             {

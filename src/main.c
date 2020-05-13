@@ -4,28 +4,36 @@
 
 int main()
 {
-    FILE *instr_fp, *input_fp;
-    Command *cmd_list;
-    size_t cmd_amount;
-    int *memory;
+    FILE *instr_fp; //*input_fp, *output_fp;
+    //Command *cmd_list;
+    //size_t cmd_amount;
+    //int *memory;
+    MachineState machine;
+    MachineState *machine_ptr = &machine;
+    machine.max_memory_size = 100; //TODO
+
 
     //init
-    instr_fp = load_file("/home/musiek/Pulpit/Ram-machine/instructions/modulo.txt");
-    cmd_list = parse_commands(instr_fp, &cmd_amount);
-    print_commands(cmd_list, cmd_amount);
+    instr_fp = load_file("/home/musiek/Pulpit/Ram-machine/instructions/sumowanie_liczb.txt");
+    machine.cmd_list = parse_commands(instr_fp, &(machine_ptr->cmd_count));
+    print_commands(machine.cmd_list, machine.cmd_count);
     fclose(instr_fp);
 
-    memory = init_memory(MEM_SIZE);
 
-    input_fp = load_file("/home/musiek/Pulpit/Ram-machine/input.txt");
+    machine.memory = init_memory(machine.max_memory_size);
+
+    //TODO output_fp
+    machine.input_fp = load_file("/home/musiek/Pulpit/Ram-machine/input.txt");
     
-    loop(cmd_list, cmd_amount, input_fp, memory);
+    loop(machine_ptr);
 
 
-    //getchar(); 
+    getchar(); 
 
 
-    free(memory);
-    free(cmd_list);
+    free(machine.memory);
+    free(machine.cmd_list);
+    fclose(instr_fp);
+    fclose(machine.input_fp);
     return 0;
 }
