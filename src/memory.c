@@ -15,35 +15,39 @@ int *init_memory(size_t mem_size)
     return memory;
 }
 
-void save_to_memory(int *memory, int index, int value)
+void save_to_memory(MachineState *machine_ptr, int index, int value)
 {
-    if (index > MEM_SIZE)
+    if (index >= machine_ptr->max_memory_size)
     {
-        fprintf(stderr, "Memory limit exceeded!");
+        fprintf(stderr, "Error:Memory limit exceeded!\n");
+        fprintf(stderr, "Current memory size:%d\n", machine_ptr->max_memory_size);
+        fprintf(stderr, "Exceeded memory index:%d\n", index);
         exit(EXIT_FAILURE);
     }
 
-    memory[index] = value;
+    machine_ptr->memory[index] = value;
 }
 
-int load_from_memory(int *memory, int index)
+int load_from_memory(MachineState *machine_ptr, int index)
 {
-    if (index > MEM_SIZE)
+    if (index >= machine_ptr->max_memory_size)
     {
-        fprintf(stderr, "Memory limit exceeded!");
+        fprintf(stderr, "Error:Memory limit exceeded!\n");
+        fprintf(stderr, "Current memory size:%d\n", machine_ptr->max_memory_size);
+        fprintf(stderr, "Exceeded memory index:%d\n", index);
         exit(EXIT_FAILURE);
     }
 
-    int value = memory[index];
+    int value = machine_ptr->memory[index];
 
     return value;
 }
 
-void print_memory(int *memory, size_t mem_size)
+void print_memory(MachineState *machine_ptr, size_t mem_size)
 {
     printf("index : value\n");
     for (int i = 0; i < mem_size; i++)
     {   
-        printf("%d   -   %d\n", i, memory[i]);
+        printf("%d   -   %d\n", i, machine_ptr->memory[i]);
     }
 }

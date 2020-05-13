@@ -38,9 +38,9 @@ size_t get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd);
 
 //memory
 int *init_memory(size_t mem_size);
-void save_to_memory(int *memory, int index, int value);
-int load_from_memory(int *memory, int index);
-void print_memory(int *memory, size_t mem_size);
+void save_to_memory(MachineState *machine_ptr,  int index, int value);
+int load_from_memory(MachineState *machine_ptr, int index);
+void print_memory(MachineState *machine_ptr, size_t mem_size);
 
 //instructions
 int execute_command(MachineState *machine_ptr);

@@ -24,7 +24,7 @@ int main()
 
     //TODO output_fp
     machine.input_fp = load_file("/home/musiek/Pulpit/Ram-machine/input.txt");
-    
+    machine.output_fp = stdout;
     loop(machine_ptr);
 
 
