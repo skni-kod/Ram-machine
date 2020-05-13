@@ -15,7 +15,7 @@ int *init_memory(size_t mem_size)
     return memory;
 }
 
-void save_to_memory(int **memory, int index, int value)
+void save_to_memory(int *memory, int index, int value)
 {
     if (index > MEM_SIZE)
     {
@@ -23,10 +23,10 @@ void save_to_memory(int **memory, int index, int value)
         exit(EXIT_FAILURE);
     }
 
-    (*memory)[index] = value;
+    memory[index] = value;
 }
 
-int load_from_memory(int **memory, int index)
+int load_from_memory(int *memory, int index)
 {
     if (index > MEM_SIZE)
     {
@@ -34,16 +34,16 @@ int load_from_memory(int **memory, int index)
         exit(EXIT_FAILURE);
     }
 
-    int value = (*memory)[index];
+    int value = memory[index];
 
     return value;
 }
 
-void print_memory(int **memory, size_t mem_size)
+void print_memory(int *memory, size_t mem_size)
 {
     printf("index : value\n");
     for (int i = 0; i < mem_size; i++)
     {   
-        printf("%d   -   %d\n", i, (*memory)[i]);
+        printf("%d   -   %d\n", i, memory[i]);
     }
 }

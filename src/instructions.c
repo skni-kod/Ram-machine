@@ -14,7 +14,8 @@ int execute_command(MachineState *machine_ptr)
     }
     else if (strcmp(machine_ptr->cmd_list[machine_ptr->instruction_pointer].instruction, "JZERO") == 0)
     {
-        if (machine_ptr->memory[0] == 0)
+        //if (machine_ptr->memory[0] == 0)
+        if (load_from_memory(machine_ptr->memory, 0) == 0)
         {
             size_t tmp;
             tmp = get_matching_label(machine_ptr->cmd_list, machine_ptr->cmd_count, machine_ptr->cmd_list[machine_ptr->instruction_pointer]);
@@ -27,7 +28,8 @@ int execute_command(MachineState *machine_ptr)
     }
     else if (strcmp(machine_ptr->cmd_list[machine_ptr->instruction_pointer].instruction, "JGTZ") == 0)
     {
-        if (machine_ptr->memory[0] > 0)
+        //if (machine_ptr->memory[0] > 0)
+        if (load_from_memory(machine_ptr->memory, 0) > 0)
         {
             size_t tmp;
             tmp = get_matching_label(machine_ptr->cmd_list, machine_ptr->cmd_count, machine_ptr->cmd_list[machine_ptr->instruction_pointer]);
@@ -43,20 +45,32 @@ int execute_command(MachineState *machine_ptr)
     {
         if (machine_ptr->cmd_list[machine_ptr->instruction_pointer].operand == '*')
         {
-            int tmp = machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
-            machine_ptr->memory[0] = machine_ptr->memory[tmp];
+            //int tmp = machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
+            //machine_ptr->memory[0] = machine_ptr->memory[tmp];
+            save_to_memory( machine_ptr->memory, 0,
+                            load_from_memory(machine_ptr->memory,
+                            machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress));
         }
         else if (machine_ptr->cmd_list[machine_ptr->instruction_pointer].operand == '=')
-            machine_ptr->memory[0] = machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress;
+            //machine_ptr->memory[0] = machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress;
+            save_to_memory( machine_ptr->memory,
+                            0,
+                            machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress);
         else
-            machine_ptr->memory[0] = machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
+            //machine_ptr->memory[0] = machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
+            save_to_memory( machine_ptr->memory,
+                            0, 
+                            load_from_memory(machine_ptr->memory, machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress));
     }
     else if (strcmp(machine_ptr->cmd_list[machine_ptr->instruction_pointer].instruction, "STORE") == 0)
     {
         if (machine_ptr->cmd_list[machine_ptr->instruction_pointer].operand == '*')
         {
-            int tmp = machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
-            machine_ptr->memory[tmp] = machine_ptr->memory[0];
+            //int tmp = machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
+            //machine_ptr->memory[tmp] = machine_ptr->memory[0];
+            save_to_memory( machine_ptr->memory, 
+                            load_from_memory(machine_ptr->memory, machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress), 
+                            load_from_memory(machine_ptr->memory, 0));
         }
         else if (machine_ptr->cmd_list[machine_ptr->instruction_pointer].operand == '=')
         {
@@ -64,21 +78,38 @@ int execute_command(MachineState *machine_ptr)
             exit(EXIT_FAILURE);
         }
         else
-            machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress] = machine_ptr->memory[0];
+            //machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress] = machine_ptr->memory[0];
+            save_to_memory( machine_ptr->memory,
+                            machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress,
+                            load_from_memory(machine_ptr->memory, 0));
     }
     else if (strcmp(machine_ptr->cmd_list[machine_ptr->instruction_pointer].instruction, "ADD") == 0)
     {
         if (machine_ptr->cmd_list[machine_ptr->instruction_pointer].operand == '*')
         {
-            int tmp = machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
-            machine_ptr->memory[0] += machine_ptr->memory[tmp];
+            //int tmp = machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
+            int tmp = load_from_memory( machine_ptr->memory,
+                                        machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress);
+            save_to_memory( machine_ptr->memory,
+                            0,
+                            load_from_memory(machine_ptr->memory, 0) + tmp);
+            //machine_ptr->memory[0] += machine_ptr->memory[tmp];
         }
         else if (machine_ptr->cmd_list[machine_ptr->instruction_pointer].operand == '=')
         {
-            machine_ptr->memory[0] += machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress;
+            //machine_ptr->memory[0] += machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress;
+            save_to_memory( machine_ptr->memory,
+                            0,
+                            load_from_memory(machine_ptr->memory, 0) + machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress);
         }
         else
-            machine_ptr->memory[0] += machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
+        {
+            //machine_ptr->memory[0] += machine_ptr->memory[machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress];
+            int tmp = load_from_memory(machine_ptr->memory, machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress);
+            save_to_memory( machine_ptr->memory,
+                            0,
+                            load_from_memory(machine_ptr->memory, 0) + tmp);
+        }
     }
     else if (strcmp(machine_ptr->cmd_list[machine_ptr->instruction_pointer].instruction, "SUB") == 0)
     {
@@ -182,6 +213,9 @@ void loop(MachineState *machine_ptr)
 
     while (1)
     {
+        //temp
+        //TODO printing only as much memory as used
+        print_memory(machine_ptr->memory, machine_ptr->max_memory_size - 90);
         printf("current instr pointer:%d\n", machine_ptr->instruction_pointer);
         execute_command(machine_ptr);
     }
