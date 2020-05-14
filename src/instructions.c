@@ -8,7 +8,7 @@ int execute_command(MachineState *machine_ptr)
     if (strcmp(machine_ptr->cmd_list[machine_ptr->instruction_pointer].instruction, "JUMP") == 0)
     {
         size_t tmp;
-        tmp = get_matching_label(machine_ptr->cmd_list, machine_ptr->cmd_count,machine_ptr->cmd_list[machine_ptr->instruction_pointer]);
+        tmp = machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress;
         machine_ptr->instruction_pointer = tmp;
         return 0;
     }
@@ -17,7 +17,7 @@ int execute_command(MachineState *machine_ptr)
         if (load_from_memory(machine_ptr, 0) == 0)
         {
             size_t tmp;
-            tmp = get_matching_label(machine_ptr->cmd_list, machine_ptr->cmd_count, machine_ptr->cmd_list[machine_ptr->instruction_pointer]);
+            tmp = machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress;
             machine_ptr->instruction_pointer = tmp;
         }
         else
@@ -30,7 +30,7 @@ int execute_command(MachineState *machine_ptr)
         if (load_from_memory(machine_ptr, 0) > 0)
         {
             size_t tmp;
-            tmp = get_matching_label(machine_ptr->cmd_list, machine_ptr->cmd_count, machine_ptr->cmd_list[machine_ptr->instruction_pointer]);
+            tmp = machine_ptr->cmd_list[machine_ptr->instruction_pointer].dest_adress;
             machine_ptr->instruction_pointer = tmp;
         }
         else
@@ -208,7 +208,7 @@ int execute_command(MachineState *machine_ptr)
     }
     else if (strcmp(machine_ptr->cmd_list[machine_ptr->instruction_pointer].instruction, "HALT") == 0)
     {
-        printf("PROGRAM FINISHED.\n");
+        printf("\nPROGRAM FINISHED.\n");
         exit(EXIT_SUCCESS);
     }
     else
@@ -228,7 +228,6 @@ void loop(MachineState *machine_ptr)
 
     while (1)
     {
-        //temp
         //TODO printing only as much memory as used
         //print_memory(machine_ptr, machine_ptr->max_memory_size);
         //printf("current instr pointer:%d\n", machine_ptr->instruction_pointer);

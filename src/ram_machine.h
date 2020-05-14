@@ -8,10 +8,10 @@
 typedef struct Command
 {
     size_t cmd_index;
+    size_t dest_adress;
     char label[MAX_LABEL_LENGTH];
     char instruction[MAX_LABEL_LENGTH];
     char operand;
-    size_t dest_adress;
     char dest_label[MAX_LABEL_LENGTH];
 }Command;
 
@@ -23,7 +23,7 @@ typedef struct MachineState
     size_t cmd_count;
     Command *cmd_list;
     FILE *input_fp;
-    FILE *output_fp; //TODO
+    FILE *output_fp; 
 }MachineState;
 
 //init

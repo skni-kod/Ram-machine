@@ -119,7 +119,7 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
                         strcmp(command_list[line_counter].instruction, "JUMP") == 0 || 
                         strcmp(command_list[line_counter].instruction, "JZERO") == 0)
                     {
-                        char tmp[32];
+                        char tmp[MAX_LABEL_LENGTH];
                         sscanf(token, "%s", &tmp);
                         strcpy(command_list[line_counter].dest_label, tmp);
                         tmp[0]='\0';
@@ -151,12 +151,22 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
         line_counter++;
     }
     
+    for (int i = 0; i < *cmd_amount; i++)
+    {
+        if (strcmp(command_list[i].instruction, "JGTZ") == 0 ||
+            strcmp(command_list[i].instruction, "JUMP") == 0 || 
+            strcmp(command_list[i].instruction, "JZERO") == 0)
+        {
+            command_list[i].dest_adress = get_matching_label(command_list, *cmd_amount, command_list[i]);
+        }
+    }
+
     rewind(fp);
     return command_list;
 }
 
 void print_commands(Command *cmd_list, size_t cmd_count)
-{
+{   
     for (int i = 0; i < cmd_count; i++)
     {
         printf("index:%d\n", cmd_list[i].cmd_index);

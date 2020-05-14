@@ -28,7 +28,7 @@ Input tape should be provided as a text file with values separated by spaces, us
 Output tape is by default set as the standard output, though it can be changed to be saved as a text file using the `-output (PATH)` argument.
 
 # Registers
-Memory is made of registers. Register `0` is accumulator. Other registers can be freely accessed. Registers are integers from `0` to `count - 1`. Default register count is: 100. The register count can be changed using the `-registers (COUNT)` argument.
+Memory is made of registers. Register `0` is the accumulator. Other registers can be freely accessed. Registers are integers from `0` to `count - 1`. The register count is by default set to 100. The register count can be changed using the `-registers (COUNT)` argument.
 
 # Access modifier
 The access modifier is used to specify how to handle the instruction argument. The instruction argument should be treated as follows:
