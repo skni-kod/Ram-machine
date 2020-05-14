@@ -6,8 +6,6 @@
 
 int main(int argc, char *argv[])
 {
-    printf("argc:%d\n", argc);
-
     FILE *instr_fp; 
     MachineState machine;
     MachineState *machine_ptr = &machine;

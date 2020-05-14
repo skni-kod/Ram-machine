@@ -14,20 +14,20 @@ void parse_arguments(MachineState *machine_ptr, int argc, char *argv[], FILE **i
 
     if (getcwd(cwd, sizeof(cwd)) == NULL)
     {
-        fprintf(stderr, "Error: getcwd() error!\n");
+        fprintf(stderr, "Error:getcwd() error!\n");
         exit(EXIT_FAILURE);
     }
     else
     {
+        if (strlen(cwd) >= 255)
+        {
+            fprintf(stderr, "Error:cwd maximum size exceeded!\n");
+            exit(EXIT_FAILURE); 
+        }
         //strcat(cwd, "/");
         printf("cwd:%s/\n", cwd);
     }
 
-    //parsing arguments
-    //default reg size 100
-    //default output stdout
-    //default input input.txt
-    //no default code 
     if (argc % 2 != 1)
     {
         fprintf(stderr, "Error: wrong argument count!\n");
@@ -107,12 +107,12 @@ void parse_arguments(MachineState *machine_ptr, int argc, char *argv[], FILE **i
     }
     if (output_flag == 0)
     {
-        printf("No output file provided. Setting output to stdout.\n");
+        printf("No output file provided. Setting the output to stdout.\n");
         machine_ptr->output_fp = stdout;
     }
     if (memory_flag == 0)
     {
-        printf("No register count provided. Setting register count to 100.\n");
+        printf("No register count provided. Setting the register count to 100.\n");
         machine_ptr->max_memory_size = 100;
     }
 }

@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MEM_SIZE 100
 #define MAX_LABEL_LENGTH 33
 
 typedef struct Command
