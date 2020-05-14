@@ -1,0 +1,18 @@
+language: c
+dist: trusty
+mono: none
+dotnet: 2.0.0
+before_install:
+  - sudo apt-get update && sudo apt install -y doxygen
+script:
+  - doxygen Doxyfile
+  - touch docs/html/.nojekyll
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    local_dir: docs/html
+    github_token: $GH_REPO_TOKEN
+    on:
+      branch: master
+notifications:
+  email: false
