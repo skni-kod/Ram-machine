@@ -42,7 +42,7 @@ List of supported instructions:
 |---|---|
 | `JUMP, , argument` | jump to label `argument` |
 | `JZERO, , argument` | jump to label `argument` if accumulator is zero |
-| `JGTZ, , argument` | jump to label `argument` if accumulator is greather than zero | |
+| `JGTZ, , argument` | jump to label `argument` if accumulator is greather than zero | 
 | `LOAD, (<nothing> or = or *), argument` | load value to accumulator from `argument` |
 | `STORE, (<nothing> or *), argument` | store value from accumulator from `argument` |
 | `ADD, (<nothing> or = or *), argument` | add `argument` to accumulator value |

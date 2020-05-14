@@ -5,48 +5,154 @@
 
 #define MAX_LABEL_LENGTH 33
 
+//!Structure representing one ram-machine command.
+/*! \struct Command
+    Each line of the ram-machine code is parsed to this structure.
+*/
 typedef struct Command
 {
-    size_t cmd_index;
-    size_t dest_adress;
-    char label[MAX_LABEL_LENGTH];
-    char instruction[MAX_LABEL_LENGTH];
-    char operand;
-    char dest_label[MAX_LABEL_LENGTH];
+    size_t cmd_index; /*!<An index of the command. Represents its place in the program.*/
+    size_t dest_adress;/*!<Destination adress. Represents an index the command is referring to.*/
+    char label[MAX_LABEL_LENGTH];/*!<Label of the command. Used with the jump instuctions.*/
+    char instruction[MAX_LABEL_LENGTH];/*!<Instruction of the command. Defines the command's activity.*/
+    char operand;/*!<Operand/access modifier of the command. Speficies how to handle the instruction argument. */
+    char dest_label[MAX_LABEL_LENGTH];/*!<Destination label of the command. Used with the jump instructions.*/
 }Command;
 
+//!Structure representing current ram-machine state.
+/*! \struct MachineState
+    Allows to keep track of the machine's state and keeps all the information at one place.
+*/
 typedef struct MachineState
 {
-    int *memory;
-    size_t max_memory_size;
-    int instruction_pointer;
-    size_t cmd_count;
-    Command *cmd_list;
-    FILE *input_fp;
-    FILE *output_fp; 
+    int *memory;/*!<A pointer to the machine's memory, which is an array of integers.*/
+    size_t max_memory_size;/*!<The maximum amount of the registers. Specifies the last available register.*/
+    int instruction_pointer;/*!<An instruction pointer. Specifies the command currently executed by the machine.*/
+    size_t cmd_count;/*!<The amount of commands in the ram-machine program. Helps to keep track of the machine's state.*/
+    Command *cmd_list;/*!<The array of the commands. Contains the whole parsed ram-machine program.*/
+    FILE *input_fp;/*!<A pointer to the input stream.*/
+    FILE *output_fp; /*!<A pointer to the output stream.*/
 }MachineState;
 
+
+//! Main function.
+/*!
+    The main function links the whole program together.
+*/
+int main(int argc, char *argv[]);
+
 //init
+//! Parse program arguments.
+/*! 
+    The parse_arguments fuction parses arguments passed with the program's execution.
+    This is the program's initial step.
+    \param machine_ptr A pointer to the MachineState structure.
+    \param argc The amount of arguments passed with the program's execution.
+    \param argv An array of the arguments passed with the program's execution.
+    \param instr_fp A pointer to the ram-machine code's stream pointer.
+*/
 void parse_arguments(MachineState *machine_ptr, int argc, char *argv[], FILE **instr_fp);
 
 //input tape
+//! Load an input file.
+/*!
+    The load_file function loads a file in read only mode.
+    \param file_path A file path.
+    \returns A pointer to a FILE stream on success or NULL pointer on failure.
+*/
 FILE *load_file(char *file_path);
+
+//! Load an output file.
+/*!
+    The load_file function loads a file in write only mode.
+    \param file_path A file path.
+    \returns A pointer to a FILE stream on success or NULL pointer on failure.
+*/
 FILE *load_output_file(char *file_path);
+
+//! Print file.
+/*!
+    The print_file function prints the contents of the file.
+    \param fp A pointer to the FILE stream.
+*/
 void print_file(FILE *fp);
+
+//! Get new input.
+/*!
+    The get_new_input function gets next value from the input stream.
+    Exits with EXIT_FAILURE when there are no more values to retrieve.
+    \param fp A pointer to the input FILE stream.
+    \returns Retrieved value from the input stream on success.
+*/
 int get_new_input(FILE *fp);
+
+//! Parse commands.
+/*!
+    The parse_commands function parses the code file, 
+    which contains the ram-machine program. 
+    \param fp A pointer to the code FILE stream.
+    \param cmd_count A pointer to the command count variable, which is modified.
+    \returns An array of Command structures, containing parsed ram-machine program.
+*/
 struct Command *parse_commands(FILE *fp, size_t *cmd_count);
+
+//! Count commands.
+/*!
+    The count_commands function counts the number of the ';' sign apperances
+    in the code file, which is equal to the number of commands in the ram-machine program.
+    \param fp A pointer to the code FILE stream.
+    \returns The number of the commands in the code file.
+*/
 size_t count_commands(FILE* fp);
+
+//! 
+/*!
+
+*/
 void print_commands(Command *cmd_list, size_t cmd_count);
-size_t get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd);
+
+//! 
+/*!
+
+*/
+int get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd);
 
 //memory
+//! 
+/*!
+
+*/
 int *init_memory(size_t mem_size);
+
+//! 
+/*!
+
+*/
 void save_to_memory(MachineState *machine_ptr,  int index, int value);
+
+//! 
+/*!
+
+*/
 int load_from_memory(MachineState *machine_ptr, int index);
+
+//! 
+/*!
+
+*/
 void print_memory(MachineState *machine_ptr, size_t mem_size);
 
 //instructions
+//! 
+/*!
+
+*/
 int execute_command(MachineState *machine_ptr);
+
+//! 
+/*!
+
+*/
 void loop(MachineState *machine_ptr);
 
 #endif 

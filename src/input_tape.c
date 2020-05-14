@@ -70,7 +70,6 @@ size_t count_commands(FILE *fp)
 struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
 {
     //TODO dynamically allocated line reading
-    //TODO dynamically allocated structures
     struct Command *command_list;
     size_t line_counter = 0;
     char buffer[256];
@@ -179,7 +178,7 @@ void print_commands(Command *cmd_list, size_t cmd_count)
     }
 }
 
-size_t get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd)
+int get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd)
 {
     for (int i = 0; i < cmd_count; i++)
     {
