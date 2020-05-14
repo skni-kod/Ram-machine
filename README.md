@@ -1,5 +1,13 @@
+<p align="center">
+<a href="https://github.com/skni-kod/Ram-machine/blob/master/LICENSE"><img src="https://img.shields.io/github/license/skni-kod/Ram-machine" alt="License"></img></a>
+<a href="https://skni-kod.github.io/Ram-machine"><img src="https://img.shields.io/badge/Doxygen-gh--pages-blue" alt="Documentation"></img></a>
+</p>
+
 # Ram-machine
 Program is a simple implementation of [RAM machine](https://en.wikipedia.org/wiki/Random-access_machine).
+
+# Documentation
+Code documentation is [here](https://skni-kod.github.io/Ram-machine).
 
 # Program
 Program should be written with lines of code described as below:
