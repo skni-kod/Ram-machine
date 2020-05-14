@@ -208,7 +208,7 @@ int execute_command(MachineState *machine_ptr)
     }
     else if (strcmp(machine_ptr->cmd_list[machine_ptr->instruction_pointer].instruction, "HALT") == 0)
     {
-        printf("PROGRAM FINISHED");
+        printf("PROGRAM FINISHED.\n");
         exit(EXIT_SUCCESS);
     }
     else
@@ -231,7 +231,7 @@ void loop(MachineState *machine_ptr)
         //temp
         //TODO printing only as much memory as used
         //print_memory(machine_ptr, machine_ptr->max_memory_size);
-        printf("current instr pointer:%d\n", machine_ptr->instruction_pointer);
+        //printf("current instr pointer:%d\n", machine_ptr->instruction_pointer);
         execute_command(machine_ptr);
     }
 }

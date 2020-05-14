@@ -17,6 +17,19 @@ FILE *load_file(char *file_path)
     return fp;
 }
 
+FILE *load_output_file(char *file_path)
+{
+    FILE *fp = fopen(file_path, "w");
+
+    if (fp == NULL)
+    {
+        fprintf(stderr, "Error loading a file!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return fp;
+}
+
 void print_file(FILE *fp)
 {
     //TODO dynamic allocation

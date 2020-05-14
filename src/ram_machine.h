@@ -27,8 +27,12 @@ typedef struct MachineState
     FILE *output_fp; //TODO
 }MachineState;
 
+//init
+void parse_arguments(MachineState *machine_ptr, int argc, char *argv[], FILE **instr_fp);
+
 //input tape
 FILE *load_file(char *file_path);
+FILE *load_output_file(char *file_path);
 void print_file(FILE *fp);
 int get_new_input(FILE *fp);
 struct Command *parse_commands(FILE *fp, size_t *cmd_count);
