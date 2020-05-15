@@ -223,7 +223,6 @@ int execute_command(MachineState *machine_ptr)
 
 void loop(MachineState *machine_ptr)
 {
-    //int instruction_pointer = 0;
     machine_ptr->instruction_pointer = 0;
 
     while (1)

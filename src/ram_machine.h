@@ -91,7 +91,7 @@ int get_new_input(FILE *fp);
     The parse_commands function parses the code file, 
     which contains the ram-machine program. 
     \param fp A pointer to the code FILE stream.
-    \param cmd_count A pointer to the command count variable, which is modified.
+    \param cmd_count A pointer to the command count variable, which is modified inside the function.
     \returns An array of Command structures, containing parsed ram-machine program.
 */
 struct Command *parse_commands(FILE *fp, size_t *cmd_count);
@@ -105,53 +105,81 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_count);
 */
 size_t count_commands(FILE* fp);
 
-//! 
+//! Print commands.
 /*!
-
+    The print_commands function prints out the commands, with its content, from the commmands array.
+    \param cmd_list The array of commands, parsed using parse_commands function.
+    \param cmd_count Command count variable.
 */
 void print_commands(Command *cmd_list, size_t cmd_count);
 
-//! 
+//! Get matching label.
 /*!
-
+    The get_matching_label function searches the commands array for a command with matching label.
+    \param cmd_list The array of commands, parsed using parse_commands function.
+    If the matching command has not been found, the function returns error and exits, 
+    as the program itself has to be wrong.
+    \param cmd_cmount Command count variable.
+    \param cmd The command for which a matching label has to be found. It has to be one of the jump instructions
+    \returns An index of the command with matching label.
 */
 int get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd);
 
 //memory
-//! 
+//! Initialise memory.
 /*!
-
+    The init_memory function initialises the ram-machine memory, 
+    allocating the memory for the memory array in size of mem_size.
+    \param mem_size The size of the initialised memory. It also represents the maximum available register.
+    \returns A pointer to the memory array.
 */
 int *init_memory(size_t mem_size);
 
-//! 
+//! Save to memory.
 /*!
-
+    The save_to_memory function writes a value to the memory's register.
+    \param machine_ptr A pointer to the MachineState structure.
+    \param index An index of the memory register for the value to be written to.
+    \param value The value to be written to the memory register.
 */
 void save_to_memory(MachineState *machine_ptr,  int index, int value);
 
-//! 
+//! Load from memory.
 /*!
-
+    The load_from_memory function gets a value from the memory register 
+    speficied by the index.
+    \param machine_ptr A pointer to the MachineState structure.
+    \param index An index of the memory register from which the value will be retrieved.
+    \returns The retrieved value of the memory register.
 */
 int load_from_memory(MachineState *machine_ptr, int index);
 
-//! 
+//! Print memory.
 /*!
-
+    The print_memory function prints out the contents of the ram-machine's memory,
+    printing out first mem_size registers.
+    \param machine_ptr A pointer to the MachineState structure.
+    \param mem_size The number of registers we want to print out, beginning from 0.
 */
 void print_memory(MachineState *machine_ptr, size_t mem_size);
 
 //instructions
-//! 
+//! Execute command.
 /*!
-
+    The execute_command is probably the most important function in the whole program.
+    It executes one command from the commands array, using the current instruction_pointer 
+    located in the MachineState structure. Depending on the command, it changes the instruction 
+    pointer, memory contents, performs operations on the accumulator, reads new input from the input
+    stream or writes values to the output.
+    \param machine_ptr A pointer to the MachineState structure.
+    \returns 0 on success.
 */
 int execute_command(MachineState *machine_ptr);
 
-//! 
+//! Loop function.
 /*!
-
+    The loop function is the main loop of the ram-machine interpreter. It runs the parsed code 
+    until the program finishes or an error is encountered.
 */
 void loop(MachineState *machine_ptr);
 
