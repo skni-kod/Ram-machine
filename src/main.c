@@ -1,31 +1,33 @@
 #include "ram_machine.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
-int main()
+int main(int argc, char *argv[])
 {
-    FILE *instr_fp, *input_fp;
-    Command *cmd_list;
-    size_t cmd_amount;
-    int *memory;
+    FILE *instr_fp; 
+    MachineState machine;
+    MachineState *machine_ptr = &machine;
 
-    //init
-    instr_fp = load_file("/home/musiek/Pulpit/Ram-machine/instructions/modulo.txt");
-    cmd_list = parse_commands(instr_fp, &cmd_amount);
-    print_commands(cmd_list, cmd_amount);
+    parse_arguments(machine_ptr, argc, argv, &instr_fp);
+
+    machine.cmd_list = parse_commands(instr_fp, &(machine_ptr->cmd_count));
     fclose(instr_fp);
 
-    memory = init_memory(MEM_SIZE);
+    printf("\n");
 
-    input_fp = load_file("/home/musiek/Pulpit/Ram-machine/input.txt");
-    
-    loop(cmd_list, cmd_amount, input_fp, memory);
+    //print_commands(machine.cmd_list, machine.cmd_count);
 
+    machine.memory = init_memory(machine.max_memory_size);
 
-    //getchar(); 
+    loop(machine_ptr);
 
-
-    free(memory);
-    free(cmd_list);
+    free(machine.memory);
+    free(machine.cmd_list);
+    fclose(instr_fp);
+    fclose(machine.input_fp);
+    fclose(machine.output_fp);
     return 0;
 }
+

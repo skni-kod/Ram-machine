@@ -17,6 +17,19 @@ FILE *load_file(char *file_path)
     return fp;
 }
 
+FILE *load_output_file(char *file_path)
+{
+    FILE *fp = fopen(file_path, "w");
+
+    if (fp == NULL)
+    {
+        fprintf(stderr, "Error loading a file!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return fp;
+}
+
 void print_file(FILE *fp)
 {
     //TODO dynamic allocation
@@ -33,7 +46,6 @@ void print_file(FILE *fp)
 
 int get_new_input(FILE *fp)
 {
-    //add
     int input;
     if (fscanf(fp, "%d", &input) <= 0)
     {
@@ -58,7 +70,6 @@ size_t count_commands(FILE *fp)
 struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
 {
     //TODO dynamically allocated line reading
-    //TODO dynamically allocated structures
     struct Command *command_list;
     size_t line_counter = 0;
     char buffer[256];
@@ -74,7 +85,8 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
     }
 
     while (line_counter < *cmd_amount)
-    {   int flag = 0;
+    {   
+        int flag = 0;
         int cmd_counter = 0;
 
         command_list[line_counter].cmd_index = line_counter;
@@ -83,6 +95,12 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
 
         while (flag != 1)
         {
+            if (cmd_counter != 4 && strlen(token) > 32)
+            {
+                fprintf(stderr, "Error while parsing instructions: label or instruction too long.\n");
+                fprintf(stderr, "Current label/instruction maximum length is %d.\n", MAX_LABEL_LENGTH - 1);
+                exit(EXIT_FAILURE); 
+            }
             //switch filling the cmd struct up
             switch (cmd_counter)
             {
@@ -100,7 +118,7 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
                         strcmp(command_list[line_counter].instruction, "JUMP") == 0 || 
                         strcmp(command_list[line_counter].instruction, "JZERO") == 0)
                     {
-                        char tmp[32];
+                        char tmp[MAX_LABEL_LENGTH];
                         sscanf(token, "%s", &tmp);
                         strcpy(command_list[line_counter].dest_label, tmp);
                         tmp[0]='\0';
@@ -132,12 +150,22 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
         line_counter++;
     }
     
+    for (int i = 0; i < *cmd_amount; i++)
+    {
+        if (strcmp(command_list[i].instruction, "JGTZ") == 0 ||
+            strcmp(command_list[i].instruction, "JUMP") == 0 || 
+            strcmp(command_list[i].instruction, "JZERO") == 0)
+        {
+            command_list[i].dest_adress = get_matching_label(command_list, *cmd_amount, command_list[i]);
+        }
+    }
+
     rewind(fp);
     return command_list;
 }
 
 void print_commands(Command *cmd_list, size_t cmd_count)
-{
+{   
     for (int i = 0; i < cmd_count; i++)
     {
         printf("index:%d\n", cmd_list[i].cmd_index);
@@ -150,7 +178,7 @@ void print_commands(Command *cmd_list, size_t cmd_count)
     }
 }
 
-size_t get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd)
+int get_matching_label(Command *cmd_list, size_t cmd_count, Command cmd)
 {
     for (int i = 0; i < cmd_count; i++)
     {
