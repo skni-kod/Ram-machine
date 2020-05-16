@@ -5,7 +5,7 @@ dotnet: 2.0.0
 before_install:
   - sudo apt-get update && sudo apt install -y gcc doxygen
 script:
-  - gcc src/*.c
+  - gcc src/*.c -std=c99
   - doxygen Doxyfile
   - touch docs/html/.nojekyll
 deploy:
