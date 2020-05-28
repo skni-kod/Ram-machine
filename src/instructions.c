@@ -208,8 +208,9 @@ int execute_command(MachineState *machine_ptr)
     }
     else if (strcmp(machine_ptr->cmd_list[machine_ptr->instruction_pointer].instruction, "HALT") == 0)
     {
+        //returning -1 will exit the main loop
         printf("\nPROGRAM FINISHED.\n");
-        exit(EXIT_SUCCESS);
+        return -1;
     }
     else
     {
@@ -224,12 +225,13 @@ int execute_command(MachineState *machine_ptr)
 void loop(MachineState *machine_ptr)
 {
     machine_ptr->instruction_pointer = 0;
+    int work_state = 0;
 
-    while (1)
+    while (work_state != -1)
     {
         //TODO printing only as much memory as used
-        //print_memory(machine_ptr, machine_ptr->max_memory_size);
+        print_memory(machine_ptr, machine_ptr->max_used_memory_index);
         //printf("current instr pointer:%d\n", machine_ptr->instruction_pointer);
-        execute_command(machine_ptr);
+        work_state = execute_command(machine_ptr);
     }
 }

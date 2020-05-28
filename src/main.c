@@ -20,12 +20,13 @@ int main(int argc, char *argv[])
     //print_commands(machine.cmd_list, machine.cmd_count);
 
     machine.memory = init_memory(machine.max_memory_size);
+    machine.max_used_memory_index = 0;
 
     loop(machine_ptr);
 
+
     free(machine.memory);
     free(machine.cmd_list);
-    fclose(instr_fp);
     fclose(machine.input_fp);
     fclose(machine.output_fp);
     return 0;
