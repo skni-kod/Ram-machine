@@ -230,7 +230,7 @@ void loop(MachineState *machine_ptr)
     while (work_state != -1)
     {
         //TODO printing only as much memory as used
-        print_memory(machine_ptr, machine_ptr->max_used_memory_index);
+        //print_memory(machine_ptr, machine_ptr->max_used_memory_index);
         //printf("current instr pointer:%d\n", machine_ptr->instruction_pointer);
         work_state = execute_command(machine_ptr);
     }

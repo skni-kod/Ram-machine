@@ -13,7 +13,7 @@ Program is a simple implementation of [RAM machine](https://en.wikipedia.org/wik
 Code documentation is [here](https://skni-kod.github.io/Ram-machine).
 
 # Program
-The ram-machine program is a set of simple instructions which can be executed by the interpeter. It should be provided as a text file using the `-code (PATH)` argument.
+The ram-machine program is a set of simple instructions which can be executed by the interpeter. It should be provided as a text file using the `-code (PATH)` argument. It is important to note that the program parser skips all the spaces and newlines to avoid any unnecessary errors.
 
 The program should be written with lines of code described as below:
 
