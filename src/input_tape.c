@@ -69,11 +69,10 @@ size_t count_commands(FILE *fp)
 
 struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
 {
-    //TODO dynamically allocated line reading
     struct Command *command_list;
     size_t line_counter = 0;
     char buffer[256];
-    char *token;
+    char tmp_buffer[256];
 
     *cmd_amount = count_commands(fp);
     command_list = malloc(*cmd_amount * sizeof(Command));
@@ -85,71 +84,77 @@ struct Command *parse_commands(FILE *fp, size_t *cmd_amount)
     }
 
     while (line_counter < *cmd_amount)
-    {   
-        int flag = 0;
+    {
+        //TODO checking whether the commands are correct
+        //ex. a label made of spaces only
+        char tmp_char;
         int cmd_counter = 0;
+        buffer[0] = '\0';
 
         command_list[line_counter].cmd_index = line_counter;
-        fgets(buffer, 256, fp);
-        token = strtok(buffer, ",\n");
 
-        while (flag != 1)
+        //parse one command
+        while (cmd_counter < 5)
         {
-            if (cmd_counter != 4 && strlen(token) > 32)
+            int buf_counter = 0;
+            int flag = 0;
+
+            //parse one word
+            while (flag != 1)
             {
-                fprintf(stderr, "Error while parsing instructions: label or instruction too long.\n");
-                fprintf(stderr, "Current label/instruction maximum length is %d.\n", MAX_LABEL_LENGTH - 1);
-                exit(EXIT_FAILURE); 
+                //parsing comments is kinda cool too, as i can add them in the gui app soon
+                //if there will be any in the future ( ͡° ͜ʖ ͡°)
+                //rn spaces are also skipped in the comments
+                tmp_char = fgetc(fp);
+                //space skipping
+                if (tmp_char == '\n' || tmp_char == ' ')
+                {
+                    continue;
+                }
+                else if (tmp_char != ',' && tmp_char != ';')
+                {
+                    buffer[buf_counter] = tmp_char;
+                }
+                else
+                {
+                    flag = 1;
+                    buffer[buf_counter] = '\0';
+                }
+                buf_counter++;
             }
-            //switch filling the cmd struct up
+
             switch (cmd_counter)
             {
                 case (0):
-                    strcpy(command_list[line_counter].label, token);
+                    strcpy(command_list[line_counter].label, buffer);
                     break;
                 case (1):
-                    strcpy(command_list[line_counter].instruction, token);
+                    strcpy(command_list[line_counter].instruction, buffer);
                     break;
                 case (2):
-                    command_list[line_counter].operand = token[0];
+                    command_list[line_counter].operand = buffer[0];
                     break;
                 case (3): ;
                     if (strcmp(command_list[line_counter].instruction, "JGTZ") == 0 ||
                         strcmp(command_list[line_counter].instruction, "JUMP") == 0 || 
                         strcmp(command_list[line_counter].instruction, "JZERO") == 0)
                     {
-                        char tmp[MAX_LABEL_LENGTH];
-                        sscanf(token, "%s", &tmp);
-                        strcpy(command_list[line_counter].dest_label, tmp);
-                        tmp[0]='\0';
+                        strcpy(command_list[line_counter].dest_label, buffer);
                         break;
                     }
                     else
                     {
                         int tmp = -1;
-                        sscanf(token, "%d", &tmp);
+                        sscanf(buffer, "%d", &tmp);
                         command_list[line_counter].dest_adress = tmp;
                         break;
                     }
             }
-
-            //searching for EOL
-            for (int i = 0; i < strlen(token); i++)
-            {
-                if (token[i] == ';')
-                {
-                    flag = 1;
-                    break;
-                }
-            }
-
-            token = strtok(NULL, ",\n"); 
             cmd_counter++;
         }
-
         line_counter++;
     }
-    
+
     for (int i = 0; i < *cmd_amount; i++)
     {
         if (strcmp(command_list[i].instruction, "JGTZ") == 0 ||

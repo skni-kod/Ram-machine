@@ -29,6 +29,7 @@ typedef struct MachineState
     size_t max_memory_size;/*!<The maximum amount of the registers. Specifies the last available register.*/
     int instruction_pointer;/*!<An instruction pointer. Specifies the command currently executed by the machine.*/
     size_t cmd_count;/*!<The amount of commands in the ram-machine program. Helps to keep track of the machine's state.*/
+    int max_used_memory_index;/*!<An index of the highest memory register used. Allows to keep track how many registers are being used.*/
     Command *cmd_list;/*!<The array of the commands. Contains the whole parsed ram-machine program.*/
     FILE *input_fp;/*!<A pointer to the input stream.*/
     FILE *output_fp; /*!<A pointer to the output stream.*/
@@ -166,7 +167,7 @@ void print_memory(MachineState *machine_ptr, size_t mem_size);
 //instructions
 //! Execute command.
 /*!
-    The execute_command is probably the most important function in the whole program.
+    The execute_command function is probably the most important function in the whole program.
     It executes one command from the commands array, using the current instruction_pointer 
     located in the MachineState structure. Depending on the command, it changes the instruction 
     pointer, memory contents, performs operations on the accumulator, reads new input from the input

@@ -25,6 +25,9 @@ void save_to_memory(MachineState *machine_ptr, int index, int value)
         exit(EXIT_FAILURE);
     }
 
+    if (index > machine_ptr->max_used_memory_index)
+        machine_ptr->max_used_memory_index = index;
+
     machine_ptr->memory[index] = value;
 }
 
@@ -38,6 +41,9 @@ int load_from_memory(MachineState *machine_ptr, int index)
         exit(EXIT_FAILURE);
     }
 
+    if (index > machine_ptr->max_used_memory_index)
+        machine_ptr->max_used_memory_index = index;
+
     int value = machine_ptr->memory[index];
 
     return value;
@@ -45,6 +51,8 @@ int load_from_memory(MachineState *machine_ptr, int index)
 
 void print_memory(MachineState *machine_ptr, size_t mem_size)
 {
+    if (mem_size + 2 < machine_ptr->max_memory_size)
+        mem_size += 2;
     printf("index : value\n");
     for (int i = 0; i < mem_size; i++)
     {   
