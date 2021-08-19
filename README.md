@@ -1,7 +1,7 @@
 # Ram-machine
 
 <p align="center">
-<a href="https://travis-ci.org/skni-kod/Ram-machine"><img src="https://travis-ci.org/skni-kod/Ram-machine.svg?branch=master" alt="Build status"></img></a>
+<a href="https://travis-ci.org/skni-kod/Ram-machine"><img src="https://github.com/skni-kod/Ram-machine/actions/workflows/main.yml/badge.svg" alt="Build status"></img></a>
 <a href="https://github.com/skni-kod/Ram-machine/pulls?q=is%3Apr+is%3Aclosed"><img src="https://img.shields.io/github/issues-pr-closed-raw/skni-kod/Ram-machine" alt="Closed pull requests"></img></a>
 <a href="https://github.com/skni-kod/Ram-machine/blob/master/LICENSE"><img src="https://img.shields.io/github/license/skni-kod/Ram-machine" alt="License"></img></a>
 <a href="https://skni-kod.github.io/Ram-machine"><img src="https://img.shields.io/badge/Doxygen-gh--pages-blue" alt="Documentation"></img></a>
